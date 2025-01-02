@@ -1,1 +1,1 @@
-Credits: myStitch14 (Don't sent hate to myStitch14 if you want to hate me hate me lmao and im probably gonna go to jail so uhh yay!).
+Credits: myStitch14 (Don't sent hate to myStitch14, If you want to hate me and sent me death threat's go for It)!
