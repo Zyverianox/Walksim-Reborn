@@ -1,0 +1,109 @@
+#include <windows.h>
+
+// Variables to store the state of keys and camera position
+bool moveForward = false;
+bool moveBackward = false;
+bool moveLeft = false;
+bool moveRight = false;
+float cameraX = 0.0f;
+float cameraY = 0.0f;
+
+// Function to simulate VR controller input based on key states
+void SimulateVRControllerInput()
+{
+    // Implement your VR controller input simulation logic here
+    if (moveForward) {
+        // Move forward
+    }
+    if (moveBackward) {
+        // Move backward
+    }
+    if (moveLeft) {
+        // Move left
+    }
+    if (moveRight) {
+        // Move right
+    }
+    // Update camera position based on mouse movement
+}
+
+// Hook procedure for keyboard input
+LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+    if (nCode == HC_ACTION)
+    {
+        KBDLLHOOKSTRUCT* pKeyboard = (KBDLLHOOKSTRUCT*)lParam;
+        if (wParam == WM_KEYDOWN)
+        {
+            switch (pKeyboard->vkCode)
+            {
+                case 'W':
+                    moveForward = true;
+                    break;
+                case 'S':
+                    moveBackward = true;
+                    break;
+                case 'A':
+                    moveLeft = true;
+                    break;
+                case 'D':
+                    moveRight = true;
+                    break;
+            }
+        }
+        else if (wParam == WM_KEYUP)
+        {
+            switch (pKeyboard->vkCode)
+            {
+                case 'W':
+                    moveForward = false;
+                    break;
+                case 'S':
+                    moveBackward = false;
+                    break;
+                case 'A':
+                    moveLeft = false;
+                    break;
+                case 'D':
+                    moveRight = false;
+                    break;
+            }
+        }
+    }
+    return CallNextHookEx(NULL, nCode, wParam, lParam);
+}
+
+// Hook procedure for mouse input
+LRESULT CALLBACK MouseProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+    if (nCode == HC_ACTION)
+    {
+        MSLLHOOKSTRUCT* pMouse = (MSLLHOOKSTRUCT*)lParam;
+        if (wParam == WM_MOUSEMOVE)
+        {
+            cameraX += pMouse->pt.x;
+            cameraY += pMouse->pt.y;
+            // Update camera movement
+        }
+    }
+    return CallNextHookEx(NULL, nCode, wParam, lParam);
+}
+
+// Entry point for the DLL
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
+{
+    switch (ul_reason_for_call)
+    {
+        case DLL_PROCESS_ATTACH:
+            // Set hooks for keyboard and mouse input
+            SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, hModule, 0);
+            SetWindowsHookEx(WH_MOUSE_LL, MouseProc, hModule, 0);
+            break;
+        case DLL_PROCESS_DETACH:
+            // Unhook keyboard and mouse input
+            UnhookWindowsHookEx(KeyboardProc);
+            UnhookWindowsHookEx(MouseProc);
+            break;
+    }
+    return TRUE;
+}
