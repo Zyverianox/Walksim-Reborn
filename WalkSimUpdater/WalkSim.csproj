@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>WalkSim</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>11.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace />
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="WalkSim.Resources.WalkSimulator" />
+    <EmbeddedResource Include="WalkSim.Resources.WalkSimulator" LogicalName="WalkSim.Resources.WalkSimulator" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="UnityEngine.AssetBundleModule" />
+    <Reference Include="UnityEngine.CoreModule" />
+    <Reference Include="Assembly-CSharp" />
+    <Reference Include="UnityEngine.PhysicsModule" />
+    <Reference Include="0Harmony" />
+    <Reference Include="BepInEx" />
+    <Reference Include="BepInEx" />
+    <Reference Include="PhotonUnityNetworking" />
+    <Reference Include="Unity.InputSystem" />
+    <Reference Include="UnityEngine.UI" />
+    <Reference Include="Cinemachine" />
+    <Reference Include="UnityEngine.XRModule" />
+    <Reference Include="UnityEngine.IMGUIModule" />
+    <Reference Include="PhotonRealtime" />
+    <Reference Include="Photon3Unity3D" />
+  </ItemGroup>
+</Project>
