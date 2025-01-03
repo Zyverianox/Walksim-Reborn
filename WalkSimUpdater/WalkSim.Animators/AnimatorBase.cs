@@ -2,44 +2,49 @@ using UnityEngine;
 using WalkSim.Plugin;
 using WalkSim.Rigging;
 
-namespace WalkSim.Animators;
-
-public abstract class AnimatorBase : MonoBehaviour
+namespace WalkSim.Animators
 {
-	protected Transform body;
+    public abstract class AnimatorBase : MonoBehaviour
+    {
+        protected Transform body;
+        protected Transform head;
+        protected Rigidbody rigidbody;
+        protected HandDriver leftHand;
+        protected HandDriver rightHand;
+        protected Rig rig;
 
-	protected Transform head;
+        protected virtual void Start()
+        {
+            Logging.Debug("==START==");
+            rig = Rig.Instance;
+            body = rig.body;
+            head = rig.head;
+            rigidbody = rig.rigidbody;
+            leftHand = rig.leftHand;
+            rightHand = rig.rightHand;
+        }
 
-	protected Rigidbody rigidbody;
+        /// <summary>
+        /// Set up the animator.
+        /// </summary>
+        public abstract void Setup();
 
-	protected HandDriver leftHand;
+        /// <summary>
+        /// Clean up the animator and reset the rig.
+        /// </summary>
+        public virtual void Cleanup()
+        {
+            this.enabled = false;
+            rig.active = false;
+            rig.useGravity = true;
+            rig.headDriver.turn = true;
+            leftHand.Reset();
+            rightHand.Reset();
+        }
 
-	protected HandDriver rightHand;
-
-	protected Rig rig;
-
-	protected virtual void Start()
-	{
-		Logging.Debug("==START==");
-		rig = Rig.Instance;
-		body = rig.body;
-		head = rig.head;
-		rigidbody = rig.rigidbody;
-		leftHand = rig.leftHand;
-		rightHand = rig.rightHand;
-	}
-
-	public abstract void Setup();
-
-	public virtual void Cleanup()
-	{
-		((Behaviour)this).enabled = false;
-		rig.active = false;
-		rig.useGravity = true;
-		rig.headDriver.turn = true;
-		leftHand.Reset();
-		rightHand.Reset();
-	}
-
-	public abstract void Animate();
+        /// <summary>
+        /// Animate the rig.
+        /// </summary>
+        public abstract void Animate();
+    }
 }
