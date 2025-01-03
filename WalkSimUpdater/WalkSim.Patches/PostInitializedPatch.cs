@@ -1,13 +1,14 @@
 using HarmonyLib;
+using GorillaLocomotion;
 
-namespace WalkSim.Patches;
-
-[HarmonyPatch(typeof(GorillaTagger))]
-[HarmonyPatch(/*Could not decode attribute arguments.*/)]
-internal static class PostInitializedPatch
+namespace WalkSim.Patches
 {
-	private static void Postfix()
-	{
-		UtillaNetworkController.events.TriggerGameInitialized();
-	}
+    [HarmonyPatch(typeof(GorillaTagger), "Awake")]  // or the appropriate method name to patch
+    internal static class PostInitializedPatch
+    {
+        private static void Postfix()
+        {
+            UtillaNetworkController.events.TriggerGameInitialized();
+        }
+    }
 }
