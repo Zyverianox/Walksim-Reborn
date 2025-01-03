@@ -1,67 +1,81 @@
 using HarmonyLib;
 using WalkSim.Plugin;
 
-namespace WalkSim.Patches;
-
-[HarmonyPatch(typeof(ControllerInputPoller), "Update")]
-public class FingerPatch
+namespace WalkSim.Patches
 {
-	public static bool forceLeftGrip;
+    [HarmonyPatch(typeof(ControllerInputPoller), "Update")]
+    public class FingerPatch
+    {
+        public static bool forceLeftGrip;
+        public static bool forceRightGrip;
+        public static bool forceLeftTrigger;
+        public static bool forceRightTrigger;
+        public static bool forceLeftPrimary;
+        public static bool forceRightPrimary;
+        public static bool forceLeftSecondary;
+        public static bool forceRightSecondary;
 
-	public static bool forceRightGrip;
+        private static void Postfix(ControllerInputPoller __instance)
+        {
+            if (!Plugin.Instance.Enabled) return;
 
-	public static bool forceLeftTrigger;
+            UpdateControllerState(__instance, forceLeftGrip, forceLeftTrigger, forceLeftPrimary, forceLeftSecondary, true);
+            UpdateControllerState(__instance, forceRightGrip, forceRightTrigger, forceRightPrimary, forceRightSecondary, false);
+        }
 
-	public static bool forceRightTrigger;
+        private static void UpdateControllerState(ControllerInputPoller instance, bool grip, bool trigger, bool primary, bool secondary, bool isLeft)
+        {
+            if (grip)
+            {
+                if (isLeft)
+                {
+                    instance.leftControllerGripFloat = 1f;
+                    instance.leftGrab = true;
+                    instance.leftGrabRelease = false;
+                }
+                else
+                {
+                    instance.rightControllerGripFloat = 1f;
+                    instance.rightGrab = true;
+                    instance.rightGrabRelease = false;
+                }
+            }
 
-	public static bool forceLeftPrimary;
+            if (trigger)
+            {
+                if (isLeft)
+                {
+                    instance.leftControllerIndexFloat = 1f;
+                }
+                else
+                {
+                    instance.rightControllerIndexFloat = 1f;
+                }
+            }
 
-	public static bool forceRightPrimary;
+            if (primary)
+            {
+                if (isLeft)
+                {
+                    instance.leftControllerPrimaryButton = true;
+                }
+                else
+                {
+                    instance.rightControllerPrimaryButton = true;
+                }
+            }
 
-	public static bool forceLeftSecondary;
-
-	public static bool forceRightSecondary;
-
-	private static void Postfix(ControllerInputPoller __instance)
-	{
-		if (WalkSim.Plugin.Plugin.Instance.Enabled)
-		{
-			if (forceLeftGrip)
-			{
-				__instance.leftControllerGripFloat = 1f;
-				__instance.leftGrab = true;
-				__instance.leftGrabRelease = false;
-			}
-			if (forceRightGrip)
-			{
-				__instance.rightControllerGripFloat = 1f;
-				__instance.rightGrab = true;
-				__instance.rightGrabRelease = false;
-			}
-			if (forceLeftTrigger)
-			{
-				__instance.leftControllerIndexFloat = 1f;
-			}
-			if (forceRightTrigger)
-			{
-				__instance.rightControllerIndexFloat = 1f;
-			}
-			if (forceLeftPrimary)
-			{
-				__instance.leftControllerPrimaryButton = true;
-			}
-			if (forceRightPrimary)
-			{
-				__instance.rightControllerPrimaryButton = true;
-			}
-			if (forceLeftSecondary)
-			{
-				__instance.leftControllerSecondaryButton = true;
-			}
-			if (forceRightSecondary)
-			{
-				__instance.rightControllerSecondaryButton = true;
-			}
-		}
-	}
+            if (secondary)
+            {
+                if (isLeft)
+                {
+                    instance.leftControllerSecondaryButton = true;
+                }
+                else
+                {
+                    instance.rightControllerSecondaryButton = true;
+                }
+            }
+        }
+    }
 }
